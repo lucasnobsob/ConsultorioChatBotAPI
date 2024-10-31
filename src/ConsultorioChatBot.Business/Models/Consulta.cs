@@ -1,6 +1,4 @@
-﻿using ConsultorioChatBot.Business.Models;
-
-namespace ConsultorioChatBot.Business.Models
+﻿namespace ConsultorioChatBot.Business.Models
 {
     public class Consulta : Entity
     {
@@ -8,6 +6,6 @@ namespace ConsultorioChatBot.Business.Models
         public DateTime DataHora { get; set; }
         public string NomePaciente { get; set; }
 
-        public IEnumerable<Exame> Exames { get; set; }
+        public IEnumerable<Exame>? Exames { get; set; }
     }
 }

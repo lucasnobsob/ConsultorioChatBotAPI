@@ -1,6 +1,4 @@
-﻿using ConsultorioChatBot.Business.Models;
-
-namespace ConsultorioChatBot.Business.Models
+﻿namespace ConsultorioChatBot.Business.Models
 {
     public class Agenda : Entity
     {

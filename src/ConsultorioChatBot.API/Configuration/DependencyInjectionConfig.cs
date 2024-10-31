@@ -1,4 +1,6 @@
-﻿using ConsultorioChatBot.Data.Context;
+﻿using ConsultorioChatBot.Api.Extensions;
+using ConsultorioChatBot.Business.Intefaces;
+using ConsultorioChatBot.Data.Context;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -11,7 +13,7 @@ namespace ConsultorioChatBot.Api.Configuration
             services.AddScoped<ConsultorioDbContext>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            //services.AddScoped<IUser, AspNetUser>();
+            services.AddScoped<IUser, AspNetUser>();
 
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
