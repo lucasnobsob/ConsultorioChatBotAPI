@@ -31,9 +31,6 @@ namespace ConsultorioChatBot.Data.Migrations
                     b.Property<bool>("Confirmacao")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("ConsultaId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Contato")
                         .IsRequired()
                         .HasColumnType("varchar(15)");
@@ -41,47 +38,25 @@ namespace ConsultorioChatBot.Data.Migrations
                     b.Property<DateTime>("DataHora")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ExameId")
+                    b.Property<Guid>("MedicoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ServicoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConsultaId");
+                    b.HasIndex("MedicoId");
 
-                    b.HasIndex("ExameId");
+                    b.HasIndex("ServicoId");
 
                     b.ToTable("Agenda", (string)null);
-                });
-
-            modelBuilder.Entity("ConsultorioChatBot.Business.Models.Consulta", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DataHora")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("NomePaciente")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Consulta", (string)null);
                 });
 
             modelBuilder.Entity("ConsultorioChatBot.Business.Models.Exame", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ConsultaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Descricao")
@@ -96,9 +71,30 @@ namespace ConsultorioChatBot.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConsultaId");
-
                     b.ToTable("Exame", (string)null);
+                });
+
+            modelBuilder.Entity("ConsultorioChatBot.Business.Models.Medico", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CRM")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("Especialidade")
+                        .IsRequired()
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("varchar(15)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Medicos");
                 });
 
             modelBuilder.Entity("ConsultorioChatBot.Business.Models.PreparoExame", b =>
@@ -121,26 +117,39 @@ namespace ConsultorioChatBot.Data.Migrations
                     b.ToTable("PreparoExame", (string)null);
                 });
 
-            modelBuilder.Entity("ConsultorioChatBot.Business.Models.Agenda", b =>
+            modelBuilder.Entity("ConsultorioChatBot.Business.Models.Servico", b =>
                 {
-                    b.HasOne("ConsultorioChatBot.Business.Models.Consulta", "Consulta")
-                        .WithMany()
-                        .HasForeignKey("ConsultaId");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasOne("ConsultorioChatBot.Business.Models.Exame", "Exame")
-                        .WithMany()
-                        .HasForeignKey("ExameId");
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
 
-                    b.Navigation("Consulta");
+                    b.Property<int>("TipoServico")
+                        .HasColumnType("int");
 
-                    b.Navigation("Exame");
+                    b.HasKey("Id");
+
+                    b.ToTable("Servicos");
                 });
 
-            modelBuilder.Entity("ConsultorioChatBot.Business.Models.Exame", b =>
+            modelBuilder.Entity("ConsultorioChatBot.Business.Models.Agenda", b =>
                 {
-                    b.HasOne("ConsultorioChatBot.Business.Models.Consulta", null)
-                        .WithMany("Exames")
-                        .HasForeignKey("ConsultaId");
+                    b.HasOne("ConsultorioChatBot.Business.Models.Medico", "Medico")
+                        .WithMany()
+                        .HasForeignKey("MedicoId")
+                        .IsRequired();
+
+                    b.HasOne("ConsultorioChatBot.Business.Models.Servico", "Servico")
+                        .WithMany()
+                        .HasForeignKey("ServicoId")
+                        .IsRequired();
+
+                    b.Navigation("Medico");
+
+                    b.Navigation("Servico");
                 });
 
             modelBuilder.Entity("ConsultorioChatBot.Business.Models.PreparoExame", b =>
@@ -151,11 +160,6 @@ namespace ConsultorioChatBot.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Exame");
-                });
-
-            modelBuilder.Entity("ConsultorioChatBot.Business.Models.Consulta", b =>
-                {
-                    b.Navigation("Exames");
                 });
 #pragma warning restore 612, 618
         }
