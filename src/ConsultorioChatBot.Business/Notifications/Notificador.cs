@@ -1,4 +1,4 @@
-﻿using ConsultorioChatBot.Business.Intefaces;
+﻿using ConsultorioChatBot.Business.Interfaces;
 
 namespace ConsultorioChatBot.Business.Notificacoes
 {

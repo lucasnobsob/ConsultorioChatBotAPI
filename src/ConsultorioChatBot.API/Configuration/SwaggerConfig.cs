@@ -77,10 +77,10 @@ namespace ConsultorioChatBot.Api.Configuration
         {
             var info = new OpenApiInfo()
             {
-                Title = "API - desenvolvedor.io",
+                Title = "API - Consultorio ChatBot",
                 Version = description.ApiVersion.ToString(),
-                Description = "Esta API faz parte do curso Desenvolvimento Avançado com Angular.",
-                Contact = new OpenApiContact() { Name = "Eduardo Pires", Email = "contato@desenvolvedor.io" },
+                Description = "API voltada para a interação com o chatbot do DialogFlow para fins de estudo.",
+                Contact = new OpenApiContact() { Name = "Lucas NS", Email = "lucas.ns.93@unoeste.edu.br" },
                 License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
             };
 

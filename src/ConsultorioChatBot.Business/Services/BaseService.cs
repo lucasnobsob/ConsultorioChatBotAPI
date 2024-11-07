@@ -1,4 +1,4 @@
-﻿using ConsultorioChatBot.Business.Intefaces;
+﻿using ConsultorioChatBot.Business.Interfaces;
 using ConsultorioChatBot.Business.Models;
 using ConsultorioChatBot.Business.Notificacoes;
 using FluentValidation;

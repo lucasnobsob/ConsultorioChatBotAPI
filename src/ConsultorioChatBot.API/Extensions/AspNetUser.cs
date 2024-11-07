@@ -1,5 +1,4 @@
-﻿
-using ConsultorioChatBot.Business.Intefaces;
+﻿using ConsultorioChatBot.Business.Interfaces;
 using System.Security.Claims;
 
 namespace ConsultorioChatBot.Api.Extensions

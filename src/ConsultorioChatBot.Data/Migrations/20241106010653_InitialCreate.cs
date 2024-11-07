@@ -30,7 +30,7 @@ namespace ConsultorioChatBot.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nome = table.Column<string>(type: "varchar(15)", nullable: false),
+                    Nome = table.Column<string>(type: "varchar(40)", nullable: false),
                     Especialidade = table.Column<string>(type: "varchar(30)", nullable: false),
                     CRM = table.Column<string>(type: "varchar(10)", nullable: false)
                 },

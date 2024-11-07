@@ -4,6 +4,7 @@ using ConsultorioChatBot.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConsultorioChatBot.Data.Migrations
 {
     [DbContext(typeof(ConsultorioDbContext))]
-    partial class ConsultorioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241106010653_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,15 +98,6 @@ namespace ConsultorioChatBot.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Medicos");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("5b073252-4baf-4ed2-bc47-02e82ad921eb"),
-                            CRM = "101196/SP",
-                            Especialidade = "Gastroenterologia",
-                            Nome = "Alexandre Campos"
-                        });
                 });
 
             modelBuilder.Entity("ConsultorioChatBot.Business.Models.PreparoExame", b =>
@@ -142,38 +136,6 @@ namespace ConsultorioChatBot.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Servicos");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("dce5e3a4-73c6-45dd-8e83-25bfb9cb6501"),
-                            Descricao = "# Consulta Ou Retorno  - Atendimento Presencial.",
-                            TipoServico = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("6ac83258-188f-443a-95b9-a6cc360f57a1"),
-                            Descricao = "Endoscopia Digestiva Alta E Depois digite 60.",
-                            TipoServico = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("e84c60ad-3e4f-454e-8d98-9e1e98421305"),
-                            Descricao = "Exame Colonoscopia nº 60 Para Preparo.",
-                            TipoServico = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("be6d6493-0d50-449e-b51c-a74455198044"),
-                            Descricao = "Virtual Atendimento Via Online.",
-                            TipoServico = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("03c64136-8d2a-4468-9bf5-9be395d5be96"),
-                            Descricao = "§ Endoscopia + Colonoscopia nº60 Preparo",
-                            TipoServico = 1
-                        });
                 });
 
             modelBuilder.Entity("ConsultorioChatBot.Business.Models.Agenda", b =>

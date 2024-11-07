@@ -1,6 +1,6 @@
 ﻿using ConsultorioChatBot.Business.Notificacoes;
 
-namespace ConsultorioChatBot.Business.Intefaces
+namespace ConsultorioChatBot.Business.Interfaces
 {
     public interface INotificador
     {

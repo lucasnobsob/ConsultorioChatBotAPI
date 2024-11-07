@@ -1,7 +1,7 @@
 ﻿using ConsultorioChatBot.Business.Models;
 using System.Linq.Expressions;
 
-namespace ConsultorioChatBot.Business.Intefaces
+namespace ConsultorioChatBot.Business.Interfaces.Repositories
 {
     public interface IRepository<TEntity> : IDisposable where TEntity : Entity
     {

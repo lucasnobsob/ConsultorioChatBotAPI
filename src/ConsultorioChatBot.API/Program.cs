@@ -1,14 +1,14 @@
 using ConsultorioChatBot.Api.Configuration;
+using ConsultorioChatBot.Api.Extensions;
 using ConsultorioChatBot.Data.Context;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    //.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+//.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 builder.Services.AddControllers();
 
@@ -27,24 +27,17 @@ builder.Services.AddSwaggerConfig();
 
 builder.Services.ResolveDependencies();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseDeveloperExceptionPage();
 
-app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseAuthentication();
+app.UseMvcConfiguration();
 
-app.UseAuthorization();
-
-app.MapControllers();
+app.UseSwaggerConfig(provider);
 
 app.Run();

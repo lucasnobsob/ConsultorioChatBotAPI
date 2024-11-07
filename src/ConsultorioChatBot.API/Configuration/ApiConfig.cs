@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ConsultorioChatBot.Business.Interfaces.Services;
+using ConsultorioChatBot.Business.Services;
+using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
 namespace ConsultorioChatBot.Api.Configuration
 {

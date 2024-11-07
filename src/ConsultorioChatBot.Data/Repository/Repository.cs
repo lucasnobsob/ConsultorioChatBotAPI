@@ -1,4 +1,4 @@
-﻿using ConsultorioChatBot.Business.Intefaces;
+﻿using ConsultorioChatBot.Business.Interfaces.Repositories;
 using ConsultorioChatBot.Business.Models;
 using ConsultorioChatBot.Data.Context;
 using Microsoft.EntityFrameworkCore;

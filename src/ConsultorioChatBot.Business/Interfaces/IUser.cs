@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
-namespace ConsultorioChatBot.Business.Intefaces
+namespace ConsultorioChatBot.Business.Interfaces
 {
     public interface IUser
     {

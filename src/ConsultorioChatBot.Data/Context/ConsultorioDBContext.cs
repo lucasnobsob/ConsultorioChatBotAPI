@@ -24,7 +24,49 @@ namespace ConsultorioChatBot.Data.Context
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
 
+            modelBuilder.Entity<Servico>().HasData(
+                new Servico
+                {
+                    Id = Guid.NewGuid(),
+                    Descricao = "# Consulta Ou Retorno  - Atendimento Presencial.",
+                    TipoServico = TipoServico.Consulta
+                },
+                new Servico
+                {
+                    Id = Guid.NewGuid(),
+                    Descricao = "Endoscopia Digestiva Alta E Depois digite 60.",
+                    TipoServico = TipoServico.Exame
+                },
+                new Servico
+                {
+                    Id = Guid.NewGuid(),
+                    Descricao = "Exame Colonoscopia nº 60 Para Preparo.",
+                    TipoServico = TipoServico.Exame
+                },
+                new Servico
+                {
+                    Id = Guid.NewGuid(),
+                    Descricao = "Virtual Atendimento Via Online.",
+                    TipoServico = TipoServico.Consulta
+                },
+                new Servico
+                {
+                    Id = Guid.NewGuid(),
+                    Descricao = "§ Endoscopia + Colonoscopia nº60 Preparo",
+                    TipoServico = TipoServico.Exame
+                });
+
+            modelBuilder.Entity<Medico>().HasData(
+                new Medico
+                {
+                    Id = Guid.NewGuid(),
+                    Nome = "Alexandre Campos",
+                    Especialidade = "Gastroenterologia",
+                    CRM = "101196/SP"
+                });
+
             base.OnModelCreating(modelBuilder);
         }
+
     }
 }

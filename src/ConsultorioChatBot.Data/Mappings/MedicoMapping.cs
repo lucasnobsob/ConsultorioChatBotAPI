@@ -12,7 +12,7 @@ namespace ConsultorioChatBot.Data.Mappings
 
             builder.Property(x => x.Nome)
                 .IsRequired()
-                .HasColumnType("varchar(15)");
+                .HasColumnType("varchar(40)");
 
             builder.Property(x => x.Especialidade)
                 .IsRequired()
