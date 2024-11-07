@@ -16,14 +16,14 @@ namespace ConsultorioChatBot.API.V1.Controllers
     public class AtendimentoController : BaseController
     {
         private readonly IIntentFactory _intentFactory;
-        private readonly IUserChoiceService _userChoiceService;
+        private readonly IRedisCacheService _redisCacheService;
 
         public AtendimentoController(INotificador notificador,
             IUser user, IIntentFactory intentFactory,
-            IUserChoiceService userChoiceService) : base(notificador, user)
+            IRedisCacheService userChoiceService) : base(notificador, user)
         {
             _intentFactory = intentFactory;
-            _userChoiceService = userChoiceService;
+            _redisCacheService = userChoiceService;
         }
 
         [HttpPost("processar-intencoes")]
