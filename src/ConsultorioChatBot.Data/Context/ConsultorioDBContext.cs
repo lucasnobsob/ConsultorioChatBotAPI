@@ -10,8 +10,6 @@ namespace ConsultorioChatBot.Data.Context
         public DbSet<Agenda> Agendas { get; set; }
         public DbSet<Medico> Medicos { get; set; }
         public DbSet<Servico> Servicos { get; set; }
-        public DbSet<Exame> Exames { get; set; }
-        public DbSet<PreparoExame> PreparoExames { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

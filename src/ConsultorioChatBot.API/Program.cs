@@ -3,12 +3,18 @@ using ConsultorioChatBot.Api.Extensions;
 using ConsultorioChatBot.Data.Context;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+
+var redisConfiguration = builder.Configuration.GetSection("Redis")["ConnectionString"];
+var redis = ConnectionMultiplexer.Connect(redisConfiguration);
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 
 builder.Services.AddControllers();
 

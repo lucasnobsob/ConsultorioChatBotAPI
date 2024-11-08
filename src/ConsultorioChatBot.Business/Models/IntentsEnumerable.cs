@@ -6,6 +6,10 @@
         AgendamentoHorarioIntent,
         CancelarAgendamentoIntent,
         FalarComAtendenteIntent,
-        NovoAgendamentoIntent
+        NovoAgendamentoIntent,
+        SelecionarMedicoIntent,
+        ConfirmacaoAgendamentoIntent,
+        FinalizacaoAgendamentoIntent,
+        ConfirmacaoCancelamentoIntent
     }
 }

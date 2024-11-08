@@ -10,6 +10,10 @@ namespace ConsultorioChatBot.Data.Mappings
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.Numero)
+                .IsRequired()
+                .ValueGeneratedOnAdd();
+
             builder.Property(x => x.Descricao)
                 .IsRequired()
                 .HasColumnType("varchar(50)");

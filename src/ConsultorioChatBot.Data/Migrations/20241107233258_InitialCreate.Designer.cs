@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConsultorioChatBot.Data.Migrations
 {
     [DbContext(typeof(ConsultorioDbContext))]
-    [Migration("20241106015852_InitialSeed")]
-    partial class InitialSeed
+    [Migration("20241107233258_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,27 +56,6 @@ namespace ConsultorioChatBot.Data.Migrations
                     b.ToTable("Agenda", (string)null);
                 });
 
-            modelBuilder.Entity("ConsultorioChatBot.Business.Models.Exame", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("varchar(300)");
-
-                    b.Property<int>("DuracaoHoras")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Exame", (string)null);
-                });
-
             modelBuilder.Entity("ConsultorioChatBot.Business.Models.Medico", b =>
                 {
                     b.Property<Guid>("Id")
@@ -95,6 +74,12 @@ namespace ConsultorioChatBot.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(40)");
 
+                    b.Property<int>("Numero")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Numero"));
+
                     b.HasKey("Id");
 
                     b.ToTable("Medicos");
@@ -102,31 +87,12 @@ namespace ConsultorioChatBot.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5b073252-4baf-4ed2-bc47-02e82ad921eb"),
+                            Id = new Guid("cc2d0a62-a230-42f7-8c06-4c4917f933d8"),
                             CRM = "101196/SP",
                             Especialidade = "Gastroenterologia",
-                            Nome = "Alexandre Campos"
+                            Nome = "Alexandre Campos",
+                            Numero = 0
                         });
-                });
-
-            modelBuilder.Entity("ConsultorioChatBot.Business.Models.PreparoExame", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ExameId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Texto")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExameId");
-
-                    b.ToTable("PreparoExame", (string)null);
                 });
 
             modelBuilder.Entity("ConsultorioChatBot.Business.Models.Servico", b =>
@@ -139,6 +105,15 @@ namespace ConsultorioChatBot.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
+                    b.Property<int>("Numero")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Numero"));
+
+                    b.Property<string>("PreparoExame")
+                        .HasColumnType("varchar(100)");
+
                     b.Property<int>("TipoServico")
                         .HasColumnType("int");
 
@@ -149,34 +124,54 @@ namespace ConsultorioChatBot.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("dce5e3a4-73c6-45dd-8e83-25bfb9cb6501"),
+                            Id = new Guid("9ed2df1e-ae89-4c03-a554-fd1c66297455"),
                             Descricao = "# Consulta Ou Retorno  - Atendimento Presencial.",
+                            Numero = 0,
                             TipoServico = 0
                         },
                         new
                         {
-                            Id = new Guid("6ac83258-188f-443a-95b9-a6cc360f57a1"),
+                            Id = new Guid("6dc5206b-f685-4879-88c5-850eefb35dd5"),
                             Descricao = "Endoscopia Digestiva Alta E Depois digite 60.",
+                            Numero = 0,
                             TipoServico = 1
                         },
                         new
                         {
-                            Id = new Guid("e84c60ad-3e4f-454e-8d98-9e1e98421305"),
+                            Id = new Guid("f61a1f4d-f2ff-4f38-b318-89768a29c21c"),
                             Descricao = "Exame Colonoscopia nº 60 Para Preparo.",
+                            Numero = 0,
                             TipoServico = 1
                         },
                         new
                         {
-                            Id = new Guid("be6d6493-0d50-449e-b51c-a74455198044"),
+                            Id = new Guid("d1b32085-6104-4abd-87ca-c4600cec5ca2"),
                             Descricao = "Virtual Atendimento Via Online.",
+                            Numero = 0,
                             TipoServico = 0
                         },
                         new
                         {
-                            Id = new Guid("03c64136-8d2a-4468-9bf5-9be395d5be96"),
+                            Id = new Guid("c650a821-3ee1-4b7f-b90c-5a5b988e562f"),
                             Descricao = "§ Endoscopia + Colonoscopia nº60 Preparo",
+                            Numero = 0,
                             TipoServico = 1
                         });
+                });
+
+            modelBuilder.Entity("MedicoServico", b =>
+                {
+                    b.Property<Guid>("MedicosId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ServicosId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MedicosId", "ServicosId");
+
+                    b.HasIndex("ServicosId");
+
+                    b.ToTable("MedicoServico");
                 });
 
             modelBuilder.Entity("ConsultorioChatBot.Business.Models.Agenda", b =>
@@ -196,14 +191,17 @@ namespace ConsultorioChatBot.Data.Migrations
                     b.Navigation("Servico");
                 });
 
-            modelBuilder.Entity("ConsultorioChatBot.Business.Models.PreparoExame", b =>
+            modelBuilder.Entity("MedicoServico", b =>
                 {
-                    b.HasOne("ConsultorioChatBot.Business.Models.Exame", "Exame")
+                    b.HasOne("ConsultorioChatBot.Business.Models.Medico", null)
                         .WithMany()
-                        .HasForeignKey("ExameId")
+                        .HasForeignKey("MedicosId")
                         .IsRequired();
 
-                    b.Navigation("Exame");
+                    b.HasOne("ConsultorioChatBot.Business.Models.Servico", null)
+                        .WithMany()
+                        .HasForeignKey("ServicosId")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

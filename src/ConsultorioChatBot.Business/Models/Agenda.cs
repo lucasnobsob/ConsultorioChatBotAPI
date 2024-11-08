@@ -7,5 +7,8 @@
         public bool Confirmacao { get; set; }
         public Servico Servico { get; set; }
         public Medico Medico { get; set; }
+
+        public Guid ServicoId { get; set; }
+        public Guid MedicoId { get; set; }
     }
 }

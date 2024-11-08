@@ -2,7 +2,6 @@
 using ConsultorioChatBot.API.ViewModels;
 using ConsultorioChatBot.Business.Interfaces;
 using ConsultorioChatBot.Business.Interfaces.Factories;
-using ConsultorioChatBot.Business.Interfaces.Services;
 using ConsultorioChatBot.Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +15,11 @@ namespace ConsultorioChatBot.API.V1.Controllers
     public class AtendimentoController : BaseController
     {
         private readonly IIntentFactory _intentFactory;
-        private readonly IRedisCacheService _redisCacheService;
 
         public AtendimentoController(INotificador notificador,
-            IUser user, IIntentFactory intentFactory,
-            IRedisCacheService userChoiceService) : base(notificador, user)
+            IUser user, IIntentFactory intentFactory) : base(notificador, user)
         {
             _intentFactory = intentFactory;
-            _redisCacheService = userChoiceService;
         }
 
         [HttpPost("processar-intencoes")]
@@ -32,7 +28,7 @@ namespace ConsultorioChatBot.API.V1.Controllers
         {
             var intentName = (IntentsEnumerable)Enum.Parse(typeof(IntentsEnumerable), $"{payload.QueryResult.Intent.DisplayName}Intent");
             var intent = _intentFactory.GetIntent(intentName);
-            var result = await intent.ObterResposta("");
+            var result = await intent.ObterResposta(payload.QueryResult.QueryText);
 
             return CustomResponse(result);
         }

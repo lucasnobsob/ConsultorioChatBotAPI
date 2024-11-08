@@ -3,34 +3,47 @@ using ConsultorioChatBot.Business.Interfaces.Repositories;
 using ConsultorioChatBot.Business.Interfaces;
 using System.Globalization;
 using System.Text;
+using ConsultorioChatBot.Business.Helpers;
+using ConsultorioChatBot.Business.Interfaces.Services;
 
 namespace ConsultorioChatBot.Business.Services.Intents
 {
     public class AgendamentoHorarioIntent : BaseService, IIntentStrategy
     {
         private readonly IAgendaRepository _agendaRepository;
+        private readonly IRedisCacheService _redisCacheService;
         public AgendamentoHorarioIntent(INotificador notificador,
-            IAgendaRepository agendaRepository) : base(notificador)
+            IAgendaRepository agendaRepository,
+            IRedisCacheService redisCacheService) : base(notificador)
         {
             _agendaRepository = agendaRepository;
+            _redisCacheService = redisCacheService;
         }
 
         public async Task<IEnumerable<string>> ObterResposta<T>(T value)
         {
-            var data = DateTime.Now;
+            var data = DateOnly.FromDateTime(DateTime.Now);
             var result = new List<string>();
             var datas = await _agendaRepository.ObterListaDeDatasDisponíveis();
-            var datesList = Enumerable.Range(0, 5).SelectMany(dayOffset => Enumerable.Range(8, 5)
-                .Select(hour => DateTime.Today.AddDays(dayOffset).AddHours(hour))).ToList();
-            var diasAgendados = datas.GroupBy(x => x).Select(g => g.Key).ToList();
-            var horarios = datesList.Where(date => !diasAgendados.Contains(date) && date.Date == data.Date).ToList();
+            IEnumerable<(int, DateTime)>? horarios = null;
 
-            //var data = (DateTime)Convert.ChangeType(value, typeof(DateTime));
+            if (value is string numero)
+            {
+                int.TryParse(numero, out var dataIndex);
+                var diasSemana = DateHelper.GetDaysOfWeek();
+                var dia = diasSemana.FirstOrDefault(x => x.Item1 == dataIndex);
+                data = dia.Item2;
+                horarios = DateHelper.GetHoursOfDay(datas, data);
+                await _redisCacheService.SetCacheValueAsync("data", data, TimeSpan.FromMinutes(30));
+            }
+
+            if (horarios is null)
+                return new List<string>();
 
             result.Add($"Agendamento em: {data.ToString("dd/MM/yyyy")}");
             result.Add("Por favor digite uma das opções de horário abaixo ou voltar:");
-            foreach (var (horario, index) in horarios.Select((value, index) => (value, index)))
-                result.Add($"{index + 1} - {horario.ToString("HH:mm")}\n");
+            foreach (var horario in horarios)
+                result.Add($"{horario.Item1} - {horario.Item2.ToString("HH:mm")}");
 
             return result;
         }

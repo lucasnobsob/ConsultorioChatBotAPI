@@ -2,7 +2,7 @@
 
 namespace ConsultorioChatBot.Business.Interfaces.Repositories
 {
-    public interface IServicoRepository
+    public interface IServicoRepository : IRepository<Servico>
     {
         Task<IEnumerable<Servico>> ObterListaServicos();
     }

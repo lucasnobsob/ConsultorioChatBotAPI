@@ -29,7 +29,7 @@ namespace ConsultorioChatBot.Data.Repository
 
         public virtual async Task<List<TEntity>> GetAll()
         {
-            return await DbSet.ToListAsync();
+            return await DbSet.AsNoTracking().ToListAsync();
         }
 
         public virtual async Task Add(TEntity entity)

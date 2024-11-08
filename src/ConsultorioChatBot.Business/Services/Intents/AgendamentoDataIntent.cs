@@ -1,34 +1,48 @@
-﻿using ConsultorioChatBot.Business.Interfaces;
+﻿using ConsultorioChatBot.Business.Helpers;
+using ConsultorioChatBot.Business.Interfaces;
 using ConsultorioChatBot.Business.Interfaces.Factories;
 using ConsultorioChatBot.Business.Interfaces.Repositories;
+using ConsultorioChatBot.Business.Interfaces.Services;
+using ConsultorioChatBot.Business.Models;
 using System.Globalization;
 
 namespace ConsultorioChatBot.Business.Services.Intents
 {
     public class AgendamentoDataIntent : BaseService, IIntentStrategy
     {
-        private readonly IAgendaRepository _agendaRepository;
+        private readonly IServicoRepository _servicoRepository;
+        private readonly IRedisCacheService _redisCacheService;
         public AgendamentoDataIntent(INotificador notificador,
-            IAgendaRepository agendaRepository) : base(notificador)
+            IServicoRepository servicoRepository,
+            IRedisCacheService redisCacheService) : base(notificador)
         {
-            _agendaRepository = agendaRepository;
+            _servicoRepository = servicoRepository;
+            _redisCacheService = redisCacheService;
         }
 
         public async Task<IEnumerable<string>> ObterResposta<T>(T value)
         {
             var result = new List<string>();
-            var datas = await _agendaRepository.ObterListaDeDatasDisponíveis();
-            var diasSemana = Enumerable.Range(1, 5).Select(i => DateOnly.FromDateTime(DateTime.Now.AddDays(i - 1))).ToList();
-            var diasAgendados = datas.GroupBy(x => x.Date).Select(x => DateOnly.FromDateTime(x.Key)).ToList();
-            var diasDisponiveis = diasSemana.Except(diasAgendados).ToList();
+            var medico = await _redisCacheService.GetCacheValueAsync<Medico>("medico");
 
-            result.Add("Qual a data que deseja marcar?\r\n");
-            result.Add("Digite em qual data deseja agendar, 6 para outras datas ou voltar: \n\n");
-
-            foreach (var (data, index) in diasDisponiveis.Select((value, index) => (value, index)))
+            if (value is string numero)
             {
-                result.Add($"{index + 1} - {data.ToString("dddd", new CultureInfo("pt-BR"))}\n");
-                result.Add($"{data.ToString("dd 'de' MMMM 'de' yyyy", new CultureInfo("pt-BR"))}\n\n");
+                int.TryParse(numero, out var servicoNumero);
+                var servicos = await _servicoRepository.Find(x => x.Numero == servicoNumero);
+                var servico = servicos.FirstOrDefault();
+                if (servico is null) return new List<string>();
+                await _redisCacheService.SetCacheValueAsync("servico", servico, TimeSpan.FromMinutes(30));
+            }
+
+            var datasDisponiveis = DateHelper.GetDaysOfWeek();
+
+            result.Add("Qual a data que deseja marcar?");
+            result.Add("Digite em qual data deseja agendar, 6 para outras datas ou voltar:");
+
+            foreach (var data in datasDisponiveis)
+            {
+                result.Add($"{data.Item1} - {data.Item2.ToString("dddd", new CultureInfo("pt-BR"))}");
+                result.Add($"{data.Item2.ToString("dd 'de' MMMM 'de' yyyy", new CultureInfo("pt-BR"))}");
             }
 
             return result;

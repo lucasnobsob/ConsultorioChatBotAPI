@@ -18,9 +18,9 @@ namespace ConsultorioChatBot.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Agenda>> ObterTodosOsAgendamentos()
+        public async Task<IEnumerable<Agenda>> ObterAgendaComMedicoEServico()
         {
-            return await Db.Agendas.AsNoTracking().ToListAsync();
+            return await Db.Agendas.AsNoTracking().Include(x => x.Medico).Include(x => x.Servico).ToListAsync();
         }
 
     }

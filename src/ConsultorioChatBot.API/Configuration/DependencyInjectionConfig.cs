@@ -20,7 +20,9 @@ namespace ConsultorioChatBot.Api.Configuration
         {
             services.AddScoped<ConsultorioDbContext>();
             services.AddScoped<IServicoRepository, ServicoRepository>();
+            services.AddScoped<IMedicoRepository, MedicoRepository>();
             services.AddScoped<IAgendaRepository, AgendaRepository>();
+            services.AddSingleton<IRedisCacheService, RedisCacheService>();
 
             services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IIntentFactory, IntentFactory>();
@@ -29,6 +31,10 @@ namespace ConsultorioChatBot.Api.Configuration
             services.AddScoped<IIntentStrategy, CancelarAgendamentoIntent>();
             services.AddScoped<IIntentStrategy, FalarComAtendenteIntent>();
             services.AddScoped<IIntentStrategy, NovoAgendamentoIntent>();
+            services.AddScoped<IIntentStrategy, SelecionarMedicoIntent>();
+            services.AddScoped<IIntentStrategy, ConfirmacaoAgendamentoIntent>();
+            services.AddScoped<IIntentStrategy, FinalizacaoAgendamentoIntent>();
+            services.AddScoped<IIntentStrategy, ConfirmacaoCancelamentoIntent>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUser, AspNetUser>();
